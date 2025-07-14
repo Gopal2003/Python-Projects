@@ -7,8 +7,8 @@ def load_data():
         with open('youtube.txt','r') as file:
             return json.load(file) # Loads, convert the file into the json format. 
     except FileNotFoundError:
-        return [1,2]
-    
+        return  []
+     
 
 def save_data_helper(videos):
     with open('youtube.txt','w') as file:
@@ -17,8 +17,17 @@ def save_data_helper(videos):
 
 def list_all_videos(videos):
     # print("Inside list_all_videos funciton")
-   for index,video in enumerate(videos,start=1): 
-       print(f"{index}.")
+    if len(videos) == 0:
+        print("Empty")
+    else :
+        print("\n")
+        print('*' * 70)
+
+        for index,video in enumerate(videos,start=1): # enumerate converts the list(Videos) into tuple
+            print(f"{index} . Name: {video['name']} , Duration: {video['time']}")
+
+        print('*' * 70)
+        
 
 
 def add_video(videos):
@@ -28,10 +37,28 @@ def add_video(videos):
     save_data_helper(videos)
 
 def update_video(videos):
-    pass
+    list_all_videos(videos)
+    index = int(input("Enter the video number to update: "))
+    if index >= 1 and index <= len(videos):
+        name = input("Enter the new video name: ")
+        time = input("Enter the new video time: ")
+        videos[index - 1] = {'name' : name, 'time' : time}
+        save_data_helper(videos)
+        print(" \n Video Details Updated Successfully!.")
+    else :
+        print(f"Video with number {index} Doesn't exists.")
+        
 
 def delete_video(videos):
-    pass
+    list_all_videos(videos)
+
+    index = int(input("Enter the video number to Delete: "))
+    if 1 <= index <= len(videos):
+        del videos[index - 1]
+        save_data_helper(videos)
+        print("\n Video Deleted Successfully!.") 
+    else :
+        print("\n Invalid video number selected.") 
 
 
 def main():
@@ -45,7 +72,7 @@ def main():
         print("4. Delete a youtube video")
         print("5. Exit the app")
         choice = input("Enter your choice: ")
-        print(videos)
+        # print(videos)
 
         match choice :
             case '1':
